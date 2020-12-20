@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import static org.junit.Assert.assertNotNull;
@@ -24,7 +25,10 @@ public class AppTest {
     private UserDao userDao;
 
     // mock 依赖
-    @Mock
+    // @Mock 与 @Spy 的区别
+    // @Mock 对象所有的方法行为都需要自己mock
+    // @Spy  对象保留对象部分真实的行为, 需要mock的行为自己定义
+    @Spy
     private MessageService messageService;
 
     // 将依赖注入目标对象
@@ -55,6 +59,14 @@ public class AppTest {
         boolean success = userService.register("fanlychie", "123456789");
         System.out.println(String.format("--- 注册结果: %b ---", success));
         assertTrue(success);
+    }
+
+    @Test
+    public void testGetVersion() {
+        // @Spy  对象保留对象部分真实的行为
+        String version = messageService.getVersion();
+        assertNotNull(version);
+        System.out.println(version);
     }
 
 }
